@@ -185,7 +185,11 @@ class ForemanInventory(object):
         ret = self._get_json(url, [404])
         if ret == []:
             ret = {}
-        return ret.get('all_parameters', {})
+        ret = ret.get('all_parameters', {})
+        for param in ret:
+            if param["value"][0] == '[':
+                param["value"] = json.loads(param["value"])
+        return ret
 
     def _resolve_params(self, host):
         """Fetch host params and convert to dict"""
